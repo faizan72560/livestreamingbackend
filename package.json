@@ -1,0 +1,21 @@
+{
+  "name": "livestreaming_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "nodemon": "^3.1.5",
+    "redis": "^4.7.0",
+    "socket.io": "^4.7.5",
+    "socket.io-redis": "^6.1.1",
+    "uuid": "^10.0.0"
+  }
+}
