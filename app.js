@@ -15,9 +15,9 @@ const activeStreams = new Map();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: 'http://localhost:8081',
-  methods: ['GET', 'POST'],
-  credentials: true // If you need to send cookies or auth headers
+  origin: '*', // Allow requests from any origin
+  methods: ['GET', 'POST'], // Allow only GET and POST requests
+  credentials: true // Include credentials like cookies and auth headers if needed
 }));
 
 io.on('connection', (socket) => {
