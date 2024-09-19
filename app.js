@@ -2,6 +2,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
+const cors = require('cors'); // Import cors
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const server = http.createServer(app);
@@ -10,6 +12,13 @@ const io = socketIo(server);
 const MAX_CONNECTIONS = 10000;
 let connectedClients = 0;
 const activeStreams = new Map();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: 'http://localhost:8081',
+  methods: ['GET', 'POST'],
+  credentials: true // If you need to send cookies or auth headers
+}));
 
 io.on('connection', (socket) => {
   if (connectedClients >= MAX_CONNECTIONS) {
@@ -60,8 +69,26 @@ io.on('connection', (socket) => {
 });
 
 app.get('/health', (req, res) => {
-    res.status(200).send('Application is running');
-  });
+  res.status(200).send('Application is running');
+});
+
+const apiKey = 'IyVCvQWZTXGCbNuoIk1eaQ'; // Replace with your actual API Key
+const apiSecret = 'M3OrocRsXDqsNbwISdJEMXDKPcE0834J'; // Replace with your actual API Secret
+
+app.get('/generate-token', (req, res) => {
+  const payload = {
+    iss: apiKey,
+    exp: Math.floor(Date.now() / 1000) + (60 * 60) // Token expires in 1 hour
+  };
+
+  try {
+    const token = jwt.sign(payload, apiSecret);
+    console.log(token);
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to generate token' });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
